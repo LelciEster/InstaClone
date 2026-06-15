@@ -66,7 +66,7 @@
 
     <p class="text-neutral-500 text-sm text-center">
       Noch kein Konto?
-      <a href="/register" class="text-white font-semibold hover:text-neutral-300 transition-colors">Registrieren</a>
+      <a href="/signup" class="text-white font-semibold hover:text-neutral-300 transition-colors">Sign Up</a>
     </p>
   </div>
 
