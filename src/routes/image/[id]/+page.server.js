@@ -68,3 +68,73 @@ export const actions = {
  
     return { success: true };
   },
+
+  // Save toggle
+  save: async ({ params, cookies }) => {
+    const user = await getUser(cookies);
+    if (!user) redirect(303, '/login');
+ 
+    const [existing] = await db.query(
+      'SELECT id FROM saves WHERE image_id = ? AND user_id = ?',
+      [params.id, user.id]
+    );
+ 
+    if (existing.length > 0) {
+      await db.query('DELETE FROM saves WHERE image_id = ? AND user_id = ?', [params.id, user.id]);
+    } else {
+      await db.query('INSERT INTO saves (image_id, user_id) VALUES (?, ?)', [params.id, user.id]);
+    }
+ 
+    return { success: true };
+  },
+ 
+  // Kommentar hinzufügen
+  comment: async ({ params, request, cookies }) => {
+    const user = await getUser(cookies);
+    if (!user) redirect(303, '/login');
+ 
+    const data = await request.formData();
+    const text = data.get('text')?.toString().trim();
+    if (!text) return { error: 'Leer.' };
+ 
+    await db.query(
+      'INSERT INTO comments (image_id, user_id, text) VALUES (?, ?, ?)',
+      [params.id, user.id, text]
+    );
+ 
+    return { success: true };
+  },
+ 
+  // Kommentar löschen
+  deleteComment: async ({ request, cookies }) => {
+    const user = await getUser(cookies);
+    if (!user) redirect(303, '/login');
+ 
+    const data       = await request.formData();
+    const comment_id = data.get('comment_id');
+ 
+    await db.query(
+      'DELETE FROM comments WHERE id = ? AND user_id = ?',
+      [comment_id, user.id]
+    );
+ 
+    return { success: true };
+  },
+ 
+  // Bild melden
+  report: async ({ params, request, cookies }) => {
+    const user = await getUser(cookies);
+    if (!user) redirect(303, '/login');
+ 
+    const data    = await request.formData();
+    const reason  = data.get('reason')?.toString() ?? 'spam';
+    const message = data.get('message')?.toString().trim() ?? '';
+ 
+    await db.query(
+      'INSERT INTO reports (image_id, user_id, reason, message) VALUES (?, ?, ?, ?)',
+      [params.id, user.id, reason, message]
+    );
+ 
+    return { success: true };
+  }
+};
