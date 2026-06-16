@@ -162,3 +162,64 @@
       {' '}{data.image.description}
     </p>
   {/if}
+
+   <!-- Kommentare -->
+  <div id="comments" class="border-t border-neutral-800 pt-6">
+ 
+    <div class="flex flex-col gap-4 mb-6">
+      {#if data.comments.length === 0}
+        <p class="text-xs text-neutral-600">Noch keine Kommentare.</p>
+      {:else}
+        {#each data.comments as comment (comment.id)}
+          <div class="flex items-start gap-3">
+            <a href="/profile/{comment.username}">
+              <div class="w-7 h-7 rounded-full bg-neutral-800 overflow-hidden flex items-center justify-center shrink-0">
+                {#if comment.avatar_url}
+                  <img src={comment.avatar_url} alt={comment.username} class="w-full h-full object-cover"/>
+                {:else}
+                  <span class="text-[10px] font-bold">{comment.username[0].toUpperCase()}</span>
+                {/if}
+              </div>
+            </a>
+            <div class="flex-1">
+              <p class="text-sm text-neutral-200">
+                <a href="/profile/{comment.username}" class="font-semibold text-white">{comment.username}</a>
+                {' '}{comment.text}
+              </p>
+              <div class="flex items-center gap-3 mt-0.5">
+                <span class="text-[10px] text-neutral-600">{timeAgo(comment.created_at)}</span>
+                {#if data.user?.id === comment.user_id}
+                  <form method="POST" action="?/deleteComment">
+                    <input type="hidden" name="comment_id" value={comment.id}/>
+                    <button type="submit" class="text-[10px] text-neutral-600 hover:text-red-400 transition-colors">Löschen</button>
+                  </form>
+                {/if}
+              </div>
+            </div>
+          </div>
+        {/each}
+      {/if}
+    </div>
+ 
+    {#if data.user}
+      <form method="POST" action="?/comment" class="flex items-center gap-3 border-t border-neutral-800 pt-4">
+        <div class="w-7 h-7 rounded-full bg-neutral-800 overflow-hidden flex items-center justify-center shrink-0">
+          {#if data.user.avatar_url}
+            <img src={data.user.avatar_url} alt={data.user.username} class="w-full h-full object-cover"/>
+          {:else}
+            <span class="text-[10px] font-bold">{data.user.username[0].toUpperCase()}</span>
+          {/if}
+        </div>
+        <input type="text" name="text" placeholder="Kommentar hinzufügen..." required
+          class="flex-1 bg-transparent text-sm text-white placeholder:text-neutral-600 focus:outline-none"/>
+        <button type="submit" class="text-sm font-semibold text-blue-400 hover:text-blue-300 transition-colors">Posten</button>
+      </form>
+    {:else}
+      <p class="text-sm text-neutral-600 pt-4 border-t border-neutral-800">
+        <a href="/login" class="text-white hover:underline">Anmelden</a> um zu kommentieren.
+      </p>
+    {/if}
+ 
+  </div>
+</div>
+ 
