@@ -70,3 +70,5 @@
             <span class="text-sm">Admin</span>
           </a>
         {/if}
+
+              </nav>
