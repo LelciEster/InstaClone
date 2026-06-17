@@ -149,5 +149,92 @@
 
 </div>
 
+<!-- ── Edit Modal ── -->
 
-  
+{#if editingImage}
+
+<div class="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+
+  <div class="bg-neutral-950 border border-neutral-800 rounded-2xl w-full max-w-sm p-6">
+
+    <h2 class="text-base font-semibold text-white mb-4">
+      Beitrag bearbeiten
+    </h2>
+
+    <form method="POST" action="?/edit" onsubmit={closeEdit}>
+
+      <input type="hidden" name="id" value={editingImage.id}/>
+
+      <div class="aspect-square rounded-xl overflow-hidden bg-neutral-900 mb-4">
+
+        <img
+          src={editingImage.image_url}
+          alt="Vorschau"
+          class="w-full h-full object-cover {filters[editFilter] ?? ''}"
+        />
+
+      </div>
+
+
+      <textarea
+        name="description"
+        bind:value={editDescription}
+        rows="3"
+        placeholder="Beschreibung..."
+        class="w-full bg-neutral-900 border border-neutral-800 rounded-xl px-3 py-2.5 text-sm text-white resize-none mb-4"
+      ></textarea>
+
+
+      <div class="mb-5">
+
+        <p class="text-xs text-neutral-500 mb-2">
+          Filter
+        </p>
+
+        <div class="flex gap-2 flex-wrap">
+
+          {#each Object.keys(filters) as f}
+
+            <button
+              type="button"
+              onclick={() => editFilter = f}
+              class="px-3 py-1 rounded-lg text-xs {editFilter === f ? 'bg-white text-black' : 'bg-neutral-800 text-neutral-400'}">
+              {f}
+            </button>
+
+          {/each}
+
+        </div>
+
+        <input type="hidden" name="filter" value={editFilter}/>
+
+      </div>
+
+
+      <div class="flex gap-2">
+
+        <button
+          type="button"
+          onclick={closeEdit}
+          class="flex-1 py-2.5 rounded-xl border border-neutral-700 text-sm text-neutral-400"
+        >
+          Abbrechen
+        </button>
+
+
+        <button
+          type="submit"
+          class="flex-1 py-2.5 rounded-xl bg-white text-black text-sm font-semibold"
+        >
+          Speichern
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+{/if}
