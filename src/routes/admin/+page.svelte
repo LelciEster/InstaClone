@@ -83,4 +83,22 @@
 
             <div class="w-px bg-neutral-800"></div>
 
-           
+            <!-- User bannen -->
+            <form method="POST" action="?/ban" class="flex-1">
+              <input type="hidden" name="username" value={report.author}/>
+              <button
+                type="submit"
+                onclick={(e) => { if (!confirm(`${report.author} wirklich sperren?`)) e.preventDefault(); }}
+                class="w-full text-xs py-3 text-red-500 hover:bg-neutral-900 transition-colors"
+              >
+                User sperren
+              </button>
+            </form>
+
+          </div>
+        </div>
+      {/each}
+    </div>
+  {/if}
+
+</div>
