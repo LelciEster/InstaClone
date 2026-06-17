@@ -90,4 +90,37 @@
 			</aside>
 		{/if}
 
+		<!-- ── Mobile bar ── -->
+		{#if user}
+			<div class="md:hidden fixed top-0 left-0 right-0 h-12 bg-black border-b border-neutral-800 flex items-center justify-between px-4 z-50">
+				<span class="font-black" style="font-family:'Georgia',serif">momento</span>
+
+				<div class="flex gap-4 text-sm">
+					<a href="/" class="{active('/') ? 'text-white' : 'text-neutral-400'}">Home</a>
+					<a href="/search" class="{active('/search') ? 'text-white' : 'text-neutral-400'}">Suche</a>
+					<a href="/upload" class="{active('/upload') ? 'text-white' : 'text-neutral-400'}">Upload</a>
+					<a href="/saved" class="{active('/saved') ? 'text-white' : 'text-neutral-400'}">Saved</a>
+					<a href={`/profile/${user.username}`} class="{$page.url.pathname === `/profile/${user.username}` ? 'text-white' : 'text-neutral-400'}">Profil</a>
+				</div>
+			</div>
+		{/if}
+
+		<!-- ── Page content ── -->
+		<main class="flex-1 {user ? 'pt-12 md:pt-0' : ''}">
+			{@render children()}
+		</main>
+
+	</div>
+
+	<!-- ── Footer ── -->
+	<footer class="border-t border-neutral-800 px-6 py-6 text-center shrink-0">
+		<p class="text-xs text-neutral-600">© {new Date().getFullYear()} Momento. All rights reserved.</p>
+		<div class="flex justify-center gap-4 mt-2">
+			<a href="/privacy" class="text-xs text-neutral-700 hover:text-neutral-400 transition-colors">Privacy Policy</a>
+			<a href="/terms" class="text-xs text-neutral-700 hover:text-neutral-400 transition-colors">Terms of Service</a>
+		</div>
+	</footer>
+
+</div>
+
 		
