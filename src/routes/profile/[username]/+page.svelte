@@ -70,5 +70,84 @@
 
   </div>
 
+ <!-- ── Image Grid ── -->
+
+  {#if images.length === 0}
+
+    <div class="text-center py-24 text-neutral-700">
+      <p class="text-sm">Noch keine Beiträge.</p>
+
+      {#if isOwn}
+        <a href="/upload" class="mt-3 inline-block text-sm text-white underline">
+          Erstes Bild hochladen
+        </a>
+      {/if}
+
+    </div>
+
+  {:else}
+
+    <div class="grid grid-cols-3 gap-0.5">
+
+      {#each images as image (image.id)}
+
+        <div class="relative group aspect-square bg-neutral-900 overflow-hidden">
+
+          <a href="/image/{image.id}">
+
+            <img
+              src={image.image_url}
+              alt={image.description ?? 'Foto'}
+              loading="lazy"
+              class="w-full h-full object-cover {filters[image.filter] ?? ''} group-hover:opacity-80 transition-opacity"
+            />
+
+            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/30">
+
+              <span class="text-white text-sm font-semibold flex items-center gap-1">
+                ♥ {image.votes}
+              </span>
+
+            </div>
+
+          </a>
+
+
+          {#if isOwn}
+
+            <div class="absolute top-1.5 right-1.5 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+
+              <button
+                onclick={() => openEdit(image)}
+                class="w-7 h-7 rounded-full bg-black/70 text-white"
+              >
+                Edit
+              </button>
+
+              <form method="POST" action="?/delete">
+                <input type="hidden" name="id" value={image.id}/>
+
+                <button
+                  type="submit"
+                  class="w-7 h-7 rounded-full bg-black/70 text-red-400"
+                >
+                  Delete
+                </button>
+              </form>
+
+            </div>
+
+          {/if}
+
+        </div>
+
+      {/each}
+
+    </div>
+
+  {/if}
+
+</div>
+
 
   
